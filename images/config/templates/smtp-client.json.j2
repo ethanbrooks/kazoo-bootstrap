@@ -1,0 +1,19 @@
+---
+target: /assets/config/smtp-client.json
+---
+
+{% set config = kube.get('secret', 'smtp.mailgun').data -%}
+
+{
+    "_id": "smtp_client",
+    "default": {
+        "relay": "{{ config['host'] }}",
+        "username": "{{ config['username'] }}",
+        "password": "{{ config['password'] }}",
+        "auth": "never",
+        "port": {{ config['port'] }}
+    },
+    "pvt_account_id": "system_config",
+    "pvt_account_db": "system_config",
+    "pvt_type": "config"
+}

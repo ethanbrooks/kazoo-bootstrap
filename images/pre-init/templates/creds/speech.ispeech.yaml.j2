@@ -1,0 +1,19 @@
+---
+target: /assets/creds/speech.ispeech.yaml
+---
+
+{% set config = data.get('config') %}
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: speech.{{ config['speech']['name'] }}
+  labels:
+    project: {{ config['project'] }}
+    environment: {{ config['environment'] }}
+type: Opaque
+data:
+  name: {{ config['speech']['name']|b64encode }}
+  provider: {{ config['speech']['provider']|b64encode }}
+  url: {{ config['speech']['url']|b64encode }}
+  api_key: {{ config['speech']['api_key']|b64encode }}

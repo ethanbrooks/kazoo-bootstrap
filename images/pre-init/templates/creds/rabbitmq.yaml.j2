@@ -1,0 +1,18 @@
+---
+target: /assets/creds/rabbitmq.yaml
+---
+
+{% set config = data.get('config') %}
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rabbitmq
+  labels:
+    app: rabbitmq
+    project: {{ config['project'] }}
+    environment: {{ config['environment'] }}
+type: Opaque
+data:
+  user: {{ gen_user()|b64encode }}
+  pass: {{ gen_pass()|b64encode }}

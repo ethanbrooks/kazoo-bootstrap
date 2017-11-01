@@ -1,0 +1,25 @@
+---
+target: /assets/creds/docker.yaml
+---
+
+{% set config = data.get('config') %}
+
+{%- set docker_json = json.dumps(
+    dict(auths={'https://index.docker.io/v1': dict(
+        auth='{}:{}'.format(
+            config['docker']['user'],
+            config['docker']['pass']
+        )|b64encode
+    )})
+) -%}
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: registrypullsecret
+  labels:
+    project: {{ config['project'] }}
+    environment: {{ config['environment'] }}
+type: kubernetes.io/dockerconfigjson
+data:
+  .dockerconfigjson: {{ docker_json|b64encode }}

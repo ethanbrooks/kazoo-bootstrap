@@ -1,0 +1,70 @@
+---
+target: /assets/config/service-plan.test-plan-1.json
+---
+
+{
+    "_id": "service-plan.test-plan-1",
+    "name": "test plan 1",
+    "description": "test plan 1 description",
+    "pvt_type": "service_plan",
+    "plan": {
+        "phone_numbers": {
+            "did_us": {
+                "name": "US DID",
+                "rate": 1,
+                "activation_charge": 3,
+                "discounts": {
+                    "cumulative": {
+                        "maximum": 2,
+                        "rate": 0.5
+                    }
+                },
+                "cascade": false
+            },
+            "tollfree_us": {
+                "name": "US Tollfree",
+                "rate": 5,
+                "cascade": true,
+                "minimum": 10
+            }
+        },
+        "number_services": {
+            "cnam": {
+                "name": "CNAM Update",
+                "activation_charge": 2
+            },
+            "port": {
+                "name": "Port Request",
+                "activation_charge": 5
+            },
+            "e911": {
+                "name": "E911 Service",
+                "rate": 5,
+                "discounts": {
+                    "single": {
+                        "rate": 5
+                    }
+                }
+            }
+        },
+        "limits": {
+            "twoway_trunks": {
+                "name": "Two-Way Trunk",
+                "rate": 19.99
+            },
+            "inbound_trunks": {
+                "name": "Inbound Trunk",
+                "rate": 9.99
+            }
+        },
+        "devices": {
+            "_all": {
+                "name": "SIP Device",
+                "as": "sip_devices",
+                "cascade": true,
+                "activation_charge": 0,
+                "rate": 0
+            }
+        }
+    }
+}

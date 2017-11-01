@@ -1,0 +1,53 @@
+---
+target: /assets/config/resource.callwithus.intl.json
+---
+
+{% set config = kube.get('secret', 'resource.callwithus').data -%}
+
+{
+    "name": "{{ "{}-intl".format(config['name']) }}",
+    "enabled": true,
+    "weight_cost": "50",
+    "emergency": false,
+    "peer": false,
+    "grace_period": 5,
+    "flags": [],
+    "gateways": [
+        {
+            "prefix": "",
+            "codecs": [
+                "PCMU"
+            ],
+            "progress_timeout": "20",
+            "server": "{{ config['server'] }}",
+            "username": "{{ config['username'] }}",
+            "password": "{{ config['password'] }}",
+            "realm": "{{ config['realm'] }}",
+            "format_from_uri": false,
+            "suffix": "",
+            "enabled": true,
+            "custom_sip_headers": {},
+            "invite_format": "route",
+            "endpoint_type": "sip",
+            "channel_selection": "ascending",
+            "emergency": false
+        }
+    ],
+    "rules": [
+        "^((011|\\+)[2-9]\\d{6,})$"
+    ],
+    "caller_id_options": {
+        "type": "external"
+    },
+    "media": {
+        "audio": {
+            "codecs": [
+                "PCMU"
+            ]
+        },
+        "video": {
+            "codecs": [
+            ]
+        }
+    }
+}

@@ -1,0 +1,33 @@
+---
+target: /assets/configs/environment.yaml
+---
+
+{% set config = data.get('config') -%}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: environment
+  labels:
+    project: {{ config['project'] }}
+    environment: {{ config['environment'] }}
+data:
+  environment: {{ config['project'] }}
+  project: {{ config['environment'] }}
+  language: en-us
+  region: east
+  datacenter: lw
+
+  company.name: Valuphone, LLC
+  company.domain: valuphone.com
+  company.support.email: support@valuphone.com
+  company.support.phone: '(444) 666-7777'
+  company.home.url: https://valuphone.com
+
+  path.media: /opt/kazoo/media/prompts/en/us
+  path.monster-apps: /var/www/html/monster-ui/apps
+
+  uri.crossbar: https://api.valuphone.com/v2
+  uri.couchdb: http://couchdb-lb:5984
+  uri.monster-ui: https://my.valuphone.com
+  uri.websockets: wss://wss.valuphone.com

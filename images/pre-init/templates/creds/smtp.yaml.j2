@@ -1,0 +1,21 @@
+---
+target: /assets/creds/smtp.mailgun.yaml
+---
+
+{% set config = data.get('config') %}
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: smtp.{{ config['smtp']['name'] }}
+  labels:
+    app: kazoo
+    project: {{ config['project'] }}
+    environment: {{ config['environment'] }}
+type: Opaque
+data:
+  name: {{ config['smtp']['name']|b64encode }}
+  host: {{ config['smtp']['host']|b64encode }}
+  port: {{ config['smtp']['port']|b64encode }}
+  user: {{ config['smtp']['user']|b64encode }}
+  pass: {{ config['smtp']['pass']|b64encode }}

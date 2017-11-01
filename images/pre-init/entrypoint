@@ -1,0 +1,30 @@
+#!/bin/bash -l
+
+set -e
+
+
+if [[ -d /var/run/secrets/kubernetes.io ]]; then
+    log::m-info "Bootstrapping kube-config ..."
+
+    kubectl config set-credentials admin \
+        --token=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+
+    kubectl config set-context local \
+        --cluster=local \
+        --user=admin \
+        --namespace=$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)
+fi
+
+
+log::m-info "Rendering sensitive assets ..."
+tmpld --data /config/config.yaml /templates/**/*.j2
+
+
+if [[ -d /var/run/secrets/kubernetes.io ]]; then
+    log::m-info "Sending assets to kubernetes ..."
+    kubectl apply -f /assets -R --dry-run
+fi
+
+
+log::m-info "Finished successfully ..."
+exit 0

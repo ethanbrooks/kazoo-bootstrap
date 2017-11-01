@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cluster-bootstrap
+  labels:
+    project: telephoneorg
+    environment: production
+spec:
+  template:
+    metadata:
+      name: cluster-bootstrap
+    spec:
+      initContainers:
+      - name: kubewait
+        image: telephoneorg/kubewait
+        imagePullPolicy: IfNotPresent
+        args:
+        - rabbitmq
+        - couchdb
+        - kazoo
+        - freeswitch
+        - kamailio
+        env:
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+      containers:
+      - name: pre-init
+        image: telephoneorg/bootstrap-pre-init:latest
+        imagePullPolicy: Always
+      - name: post-init
+        image: telephoneorg/bootstrap-post-init:latest
+        imagePullPolicy: Always
+      - name: config
+        image: telephoneorg/bootstrap-config:latest
+        imagePullPolicy: Always
+      restartPolicy: Never

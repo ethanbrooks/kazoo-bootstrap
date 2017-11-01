@@ -1,0 +1,20 @@
+---
+target: /assets/creds/resource.callwithus.yaml
+---
+
+{% set config = data.get('config') %}
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: resource.{{ config['resource']['name'] }}
+  labels:
+    project: {{ config['project'] }}
+    environment: {{ config['environment'] }}
+type: Opaque
+data:
+  name: {{ config['resource']['name']|b64encode }}
+  server: {{ config['resource']['server']|b64encode }}
+  realm: {{ config['resource']['realm']|b64encode }}
+  username: {{ config['resource']['username']|b64encode }}
+  password: {{ config['resource']['password']|b64encode }}

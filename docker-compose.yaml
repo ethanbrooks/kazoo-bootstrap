@@ -1,0 +1,35 @@
+version: '2.3'
+services:
+  base:
+    container_name: bootstrap-base
+    build:
+      context: images/base
+      args:
+        TMPLD_VERSION: 0.2.7
+        KUBERNETES_VERSION: 1.7.3
+    image: telephoneorg/bootstrap-base:${TAG:-latest}
+  pre-init:
+    container_name: bootstrap-pre-init
+    build: images/pre-init
+    image: telephoneorg/bootstrap-pre-init:${TAG:-latest}
+    volumes:
+    - $PWD/images/pre-init/config.yaml:/config/config.yaml
+    - /Users/joeblack/.kube/config:/bootstrap/.kube/config
+  post-init:
+    container_name: bootstrap-post-init
+    build:
+      context: images/post-init
+      args:
+        KZCONFIG_VERSION: '0.2.0'
+    image: telephoneorg/bootstrap-post-init:${TAG:-latest}
+    volumes:
+    - /Users/joeblack/.kube/config:/bootstrap/.kube/config
+  config:
+    container_name: bootstrap-config
+    build:
+      context: images/config
+      args:
+        KZCONFIG_VERSION: '0.2.0'
+    image: telephoneorg/bootstrap-config:${TAG:-latest}
+    volumes:
+    - /Users/joeblack/.kube/config:/bootstrap/.kube/config

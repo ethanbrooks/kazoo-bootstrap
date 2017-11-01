@@ -1,0 +1,26 @@
+#!/bin/bash -l
+
+
+if [[ -d /var/run/secrets/kubernetes.io ]]; then
+    log::m-info "Bootstrapping kube-config ..."
+
+    kubectl config set-credentials admin \
+        --token=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+
+    kubectl config set-context local \
+        --cluster=local \
+        --user=admin \
+        --namespace=$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)
+fi
+
+
+log::m-info "Rendering assets ..."
+tmpld /templates/*.j2
+
+
+log::m-info "Initializing kazoo ..."
+inv tasks.config
+
+
+log::m-info "Finished successfully ..."
+exit 0

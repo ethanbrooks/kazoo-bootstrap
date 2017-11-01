@@ -1,0 +1,18 @@
+---
+target: /assets/creds/couchdb.yaml
+---
+
+{% set config = data.get('config') %}
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: couchdb
+  labels:
+    app: couchdb
+    project: {{ config['project'] }}
+    environment: {{ config['environment'] }}
+type: Opaque
+data:
+  user: {{ gen_user()|b64encode }}
+  pass: {{ gen_user()|b64encode }}

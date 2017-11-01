@@ -1,0 +1,18 @@
+---
+target: /assets/creds/erlang.yaml
+---
+
+{% set config = data.get('config') %}
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: erlang
+  labels:
+    scope: language
+    language: erlang
+    project: {{ config['project'] }}
+    environment: {{ config['environment'] }}
+type: Opaque
+data:
+  cookie: {{ gen_token()|b64encode }}
