@@ -1,15 +1,15 @@
 ---
-target: /assets/creds/smtp.mailgun.yaml
+target: assets/creds/smtp.mailgun.yaml
 ---
 
-{% set config = data.get('config') %}
+{%- set config = data.get('cluster') -%}
 
 apiVersion: v1
 kind: Secret
 metadata:
   name: smtp.{{ config['smtp']['name'] }}
   labels:
-    app: kazoo
+    role: smtp
     project: {{ config['project'] }}
     environment: {{ config['environment'] }}
 type: Opaque

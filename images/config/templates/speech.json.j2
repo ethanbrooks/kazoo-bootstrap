@@ -1,5 +1,5 @@
 ---
-target: /assets/config/speech.json
+target: assets/config/speech.json
 ---
 
 {% set config = kube.get('secret', 'speech.ispeech').data -%}
@@ -8,7 +8,7 @@ target: /assets/config/speech.json
     "_id": "speech",
     "default": {
         "tts_default_voice": "female/en-US",
-        "tts_provider": "{{ config['provider'] }}",
+        "tts_provider": "{{ config['name'] }}",
         "tts_url": "{{ config['url'] }}",
         "tts_api_key": "{{ config['api_key'] }}",
         "tts_speed": 0,

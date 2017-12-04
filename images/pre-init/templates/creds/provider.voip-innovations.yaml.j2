@@ -1,14 +1,15 @@
 ---
-target: /assets/creds/provider.voip-innovations.yaml
+target: assets/creds/provider.voip-innovations.yaml
 ---
 
-{% set config = data.get('config') %}
+{%- set config = data.get('cluster') -%}
 
 apiVersion: v1
 kind: Secret
 metadata:
   name: provider.{{ config['provider']['name'] }}
   labels:
+    role: provider
     project: {{ config['project'] }}
     environment: {{ config['environment'] }}
 type: Opaque
@@ -16,5 +17,5 @@ data:
   name: {{ config['provider']['name']|b64encode }}
   login: {{ config['provider']['login']|b64encode }}
   password:  {{ config['provider']['password']|b64encode }}
-  endpoint-group:  {{ config['provider']['endpoint-group']|b64encode }}
-  carrier_acl: {{ config['provider']['carrier-acl']|b64encode }}
+  endpoint-group:  {{ config['provider'].get('endpoint-group', 'n/a')|b64encode }}
+  carrier_acl: {{ config['provider'].get('carrier-acl', 'n/a')|b64encode }}

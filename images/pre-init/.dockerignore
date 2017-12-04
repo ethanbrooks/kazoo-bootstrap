@@ -1,2 +1,2 @@
-assets/creds/*.yaml
-config.yaml
+assets/**/*.yaml
+config/cluster.yaml

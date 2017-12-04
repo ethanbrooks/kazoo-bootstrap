@@ -2,32 +2,41 @@ from os.path import dirname, join, abspath
 
 from invoke import task, Collection
 
-
-BASE_PATH = abspath(join(dirname(__file__), '..'))
-
-
-from . import util, tasks
+from . import util, assets, kazoo
 
 
-collections = [tasks]
-
-ns = Collection()
-for c in collections:
-    ns.add_collection(c)
+namespace = Collection()
+for mod in [assets, kazoo]:
+    namespace.add_collection(mod)
 
 
-ns.configure(dict(
+namespace.configure(dict(
     project='bootstrap-config',
     kazoo=dict(
-        resources=['callwithus.intl', 'callwithus.us'],
+        resources=['callwithus-intl', 'callwithus-us'],
         provider='voip-innovations',
-        carrier_modules=['knm_voip_innovations', 'wnm_local'],
+        dns='dnsimple',
+        carrier_modules=['knm_voip_innovations', 'knm_local'],
         service_plans=['test-plan-1'],
-        rates_file='carrier-rates-wholesale.csv'
+        rates_file='ratedeck-rates.csv',
+        domains=['cluster.telephone.org', 'cluster.local.telephone.org'],
+        master_account=dict(
+            credit='25000'
+        )
+    ),
+    assets=dict(
+        glob='*.j2',
     ),
     paths=dict(
-        base=BASE_PATH,
-        config=join(BASE_PATH, 'assets', 'config'),
-        data=join(BASE_PATH, 'assets', 'data')
+        base='/bootstrap',
+        assets='assets',
+        templates='templates',
+        config='config'
     )
 ))
+
+@task(default=True, pre=[assets.all, kazoo.all])
+def all(ctx):
+    pass
+
+namespace.add_task(all)

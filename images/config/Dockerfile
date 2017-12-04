@@ -2,14 +2,11 @@ FROM    telephoneorg/bootstrap-base:latest
 
 MAINTAINER Joe Black <me@joeblack.nyc>
 
-ARG     KZCONFIG_VERSION
-ENV     KZCONFIG_VERSION ${KZCONFIG_VERSION:-0.2.0}
+VOLUME  ["$HOME/templates", "$HOME/config"]
 
-RUN     pip3 install invoke kzconfig==$KZCONFIG_VERSION
+COPY    assets $HOME/assets
+COPY    templates $HOME/templates
+COPY    config $HOME/config
+COPY    tasks $HOME/tasks
 
-COPY    entrypoint /
-COPY    assets /assets
-COPY    tasks /tasks
-COPY    templates /templates
-
-CMD     ["/entrypoint"]
+CMD     ["inv"]

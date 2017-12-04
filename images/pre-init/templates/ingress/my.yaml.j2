@@ -1,0 +1,42 @@
+---
+target: assets/ingress/my.yaml
+---
+
+{%- set config = data.get('cluster') -%}
+{%- set short_host = 'my.{}'.format(config['company']['domain']) -%}
+{%- set long_host = 'my.{}-{}.{}'.format(config['cluster']['country'], config['cluster']['region'], config['company']['domain']) -%}
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ short_host }}
+  labels:
+    app: monster-ui
+    project: {{ config['project'] }}
+    environment: {{ config['environment'] }}
+    domain: {{ short_host }}
+    provides: user-interface
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: 'true'
+spec:
+  tls:
+  - hosts:
+    - {{ short_host }}
+    {# - {{ long_host }} #}
+    secretName: {{ short_host }}-tls
+  rules:
+  - host: {{ short_host }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: monster-ui
+          servicePort: 80
+  {# - host: {{ long_host }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: monster-ui
+          servicePort: 80 #}

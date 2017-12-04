@@ -1,8 +1,8 @@
 ---
-target: /assets/creds/speech.ispeech.yaml
+target: assets/creds/speech.ispeech.yaml
 ---
 
-{% set config = data.get('config') %}
+{%- set config = data.get('cluster') -%}
 
 apiVersion: v1
 kind: Secret
@@ -14,6 +14,5 @@ metadata:
 type: Opaque
 data:
   name: {{ config['speech']['name']|b64encode }}
-  provider: {{ config['speech']['provider']|b64encode }}
   url: {{ config['speech']['url']|b64encode }}
   api_key: {{ config['speech']['api_key']|b64encode }}

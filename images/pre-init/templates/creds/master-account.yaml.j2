@@ -1,15 +1,15 @@
 ---
-target: /assets/creds/master-account.yaml
+target: assets/creds/master-account.yaml
 ---
 
-{% set config = data.get('config') %}
+{%- set config = data.get('cluster') -%}
 
 apiVersion: v1
 kind: Secret
 metadata:
   name: master-account
   labels:
-    app: kazoo
+    role: master-account
     project: {{ config['project'] }}
     environment: {{ config['environment'] }}
 type: Opaque
@@ -17,4 +17,4 @@ data:
   name: {{ config['master-account']['name']|b64encode }}
   realm: {{ config['master-account']['realm']|b64encode }}
   user: {{ config['master-account']['user']|b64encode }}
-  pass: {{ gen_pass()|b64encode }}
+  pass: {{ gen_token()|b64encode }}

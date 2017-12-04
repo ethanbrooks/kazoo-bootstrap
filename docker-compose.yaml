@@ -5,31 +5,27 @@ services:
     build:
       context: images/base
       args:
-        TMPLD_VERSION: 0.2.7
-        KUBERNETES_VERSION: 1.7.3
-    image: telephoneorg/bootstrap-base:${TAG:-latest}
+        TMPLD_VERSION: 0.2.9
+        KUBECTL_VERSION: 1.7.8
+        KUBECTL_SHA256: c4fd350f9fac76121dda479c1ceba2d339b19f8806aa54207eff55c9c6896724
+        KZCONFIG_VERSION: 0.3.3
+    image: telephoneorg/bootstrap-base:${DOCKER_TAG:-latest}
   pre-init:
     container_name: bootstrap-pre-init
     build: images/pre-init
-    image: telephoneorg/bootstrap-pre-init:${TAG:-latest}
+    image: telephoneorg/bootstrap-pre-init:${DOCKER_TAG:-latest}
     volumes:
-    - $PWD/images/pre-init/config.yaml:/config/config.yaml
-    - /Users/joeblack/.kube/config:/bootstrap/.kube/config
+    - $PWD/images/pre-init/config:/bootstrap/config
+    - ~/.kube/config:/bootstrap/.kube/config
   post-init:
     container_name: bootstrap-post-init
-    build:
-      context: images/post-init
-      args:
-        KZCONFIG_VERSION: '0.2.0'
-    image: telephoneorg/bootstrap-post-init:${TAG:-latest}
+    build: images/post-init
+    image: telephoneorg/bootstrap-post-init:${DOCKER_TAG:-latest}
     volumes:
-    - /Users/joeblack/.kube/config:/bootstrap/.kube/config
+    - ~/.kube/config:/bootstrap/.kube/config
   config:
     container_name: bootstrap-config
-    build:
-      context: images/config
-      args:
-        KZCONFIG_VERSION: '0.2.0'
-    image: telephoneorg/bootstrap-config:${TAG:-latest}
+    build: images/config
+    image: telephoneorg/bootstrap-config:${DOCKER_TAG:-latest}
     volumes:
-    - /Users/joeblack/.kube/config:/bootstrap/.kube/config
+    - ~/.kube/config:/bootstrap/.kube/config

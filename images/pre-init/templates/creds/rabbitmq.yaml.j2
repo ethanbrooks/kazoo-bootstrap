@@ -1,8 +1,8 @@
 ---
-target: /assets/creds/rabbitmq.yaml
+target: assets/creds/rabbitmq.yaml
 ---
 
-{% set config = data.get('config') %}
+{%- set config = data.get('cluster') -%}
 
 apiVersion: v1
 kind: Secret
@@ -15,4 +15,4 @@ metadata:
 type: Opaque
 data:
   user: {{ gen_user()|b64encode }}
-  pass: {{ gen_pass()|b64encode }}
+  pass: {{ gen_token(16)|b64encode }}

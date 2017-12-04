@@ -1,8 +1,10 @@
 ---
-target: /assets/configs/environment.yaml
+target: assets/configs/environment.yaml
 ---
 
-{% set config = data.get('config') -%}
+{%- set config = data.get('cluster') -%}
+{%- set short_sbc_host = 'sbc.{}'.format(config['company']['domain']) -%}
+{%- set long_sbc_host = 'sbc.{}-{}.{}'.format(config['cluster']['country'], config['cluster']['region'], config['company']['domain']) -%}
 
 apiVersion: v1
 kind: ConfigMap
@@ -12,22 +14,29 @@ metadata:
     project: {{ config['project'] }}
     environment: {{ config['environment'] }}
 data:
-  environment: {{ config['project'] }}
-  project: {{ config['environment'] }}
-  language: en-us
-  region: east
-  datacenter: lw
+  environment: {{ config['environment'] }}
+  project: {{ config['project'] }}
+  language: {{ config['language'] }}
+  country: {{ config['cluster']['country'] }}
+  region: {{ config['cluster']['region'] }}
 
-  company.name: Valuphone, LLC
-  company.domain: valuphone.com
-  company.support.email: support@valuphone.com
-  company.support.phone: '(444) 666-7777'
-  company.home.url: https://valuphone.com
+  company.name: {{ config['company']['name'] }}
+  company.domain: {{ config['company']['domain'] }}
+  company.support.email: support@{{ config['company']['domain'] }}
+  company.support.phone: {{ config['company']['phone'] }}
+  company.home.url: https://{{ config['company']['domain'] }}
 
   path.media: /opt/kazoo/media/prompts/en/us
   path.monster-apps: /var/www/html/monster-ui/apps
 
-  uri.crossbar: https://api.valuphone.com/v2
+  host.crossbar: api.{{ config['company']['domain'] }}
+  host.sbc.short: {{ short_sbc_host }}
+  host.sbc.long: {{ long_sbc_host }}
+  host.couchdb: couchdb-lb
+  host.rabbitmq: rabbitmq
+
+  uri.crossbar: https://api.{{ config['company']['domain'] }}/v2
   uri.couchdb: http://couchdb-lb:5984
-  uri.monster-ui: https://my.valuphone.com
-  uri.websockets: wss://wss.valuphone.com
+  uri.rabbitmq: amqp://rabbitmq:5672
+  uri.monster-ui: https://my.{{ config['company']['domain'] }}
+  uri.websockets: wss://wss.{{ config['company']['domain'] }}

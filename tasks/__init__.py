@@ -22,5 +22,8 @@ ns.configure(dict(
         tag='latest',
         images=['bootstrap-base', 'bootstrap-pre-init', 'bootstrap-post-init', 'bootstrap-config'],
         shell='bash'
+    ),
+    kube=dict(
+        cluster_file='images/pre-init/config/cluster.yaml'
     )
 ))

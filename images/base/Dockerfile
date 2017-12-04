@@ -1,14 +1,14 @@
-FROM    telephoneorg/debian:stretch
+FROM    telephoneorg/kzutil:latest
 
 MAINTAINER Joe Black <me@joeblack.nyc>
 
-ARG     TMPLD_VERSION
-ARG     KUBERNETES_VERSION
-
 ENV     HOME=/bootstrap
 
+ENV     LC_ALL=C.UTF-8
+ENV     LANG=C.UTF-8
+
 RUN     mkdir -p $HOME/.kube
-COPY    config $HOME/.kube/
+
 WORKDIR $HOME
 
 COPY    words /usr/share/dict/
@@ -24,13 +24,22 @@ RUN     apt-get update -qq && \
 
 RUN     pip3 install --upgrade pip requests setuptools
 
-ENV     KUBERNETES_VERSION=${KUBERNETES_VERSION:-1.7.3}
+RUN     pip3 install invoke
 
-RUN     curl -Lo /usr/local/bin/kubectl \
-            https://storage.googleapis.com/kubernetes-release/release/v${KUBERNETES_VERSION}/bin/linux/amd64/kubectl && \
-        chmod +x /usr/local/bin/kubectl
-
-ENV     TMPLD_VERSION=${TMPLD_VERSION:-0.2.7}
+ARG     TMPLD_VERSION
+ENV     TMPLD_VERSION=${TMPLD_VERSION:-0.2.9}
 RUN     pip3 install tmpld==$TMPLD_VERSION
+
+ARG     KZCONFIG_VERSION
+ENV     KZCONFIG_VERSION=${KZCONFIG_VERSION:-0.3.2}
+RUN     pip3 install kzconfig==$KZCONFIG_VERSION
+
+ARG     KUBECTL_VERSION
+ARG     KUBECTL_SHA256
+
+ENV     KUBECTL_VERSION=${KUBECTL_VERSION:-1.7.8}
+ENV     KUBECTL_SHA256=${KUBECTL_SHA256:-c4fd350f9fac76121dda479c1ceba2d339b19f8806aa54207eff55c9c6896724}
+
+RUN     install-kubectl
 
 ENV     TMPLD_LOG_LEVEL INFO

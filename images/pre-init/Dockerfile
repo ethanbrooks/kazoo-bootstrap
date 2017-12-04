@@ -2,10 +2,10 @@ FROM    telephoneorg/bootstrap-base:latest
 
 MAINTAINER Joe Black <me@joeblack.nyc>
 
-COPY    entrypoint /
-COPY    assets /assets
-COPY    templates /templates
+COPY    assets $HOME/assets
+COPY    templates $HOME/templates
+COPY    tasks $HOME/tasks
 
-CMD     ["/entrypoint"]
+VOLUME  ["$HOME/config"]
 
-VOLUME  ["/config"]
+CMD     ["inv"]

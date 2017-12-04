@@ -1,5 +1,5 @@
 ---
-target: /assets/config/smtp-client.json
+target: assets/config/smtp-client.json
 ---
 
 {% set config = kube.get('secret', 'smtp.mailgun').data -%}
@@ -8,8 +8,8 @@ target: /assets/config/smtp-client.json
     "_id": "smtp_client",
     "default": {
         "relay": "{{ config['host'] }}",
-        "username": "{{ config['username'] }}",
-        "password": "{{ config['password'] }}",
+        "username": "{{ config['user'] }}",
+        "password": "{{ config['pass'] }}",
         "auth": "never",
         "port": {{ config['port'] }}
     },

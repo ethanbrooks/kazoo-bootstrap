@@ -1,14 +1,15 @@
 ---
-target: /assets/creds/resource.callwithus.yaml
+target: assets/creds/resource.callwithus.yaml
 ---
 
-{% set config = data.get('config') %}
+{%- set config = data.get('cluster') -%}
 
 apiVersion: v1
 kind: Secret
 metadata:
   name: resource.{{ config['resource']['name'] }}
   labels:
+    role: resource
     project: {{ config['project'] }}
     environment: {{ config['environment'] }}
 type: Opaque

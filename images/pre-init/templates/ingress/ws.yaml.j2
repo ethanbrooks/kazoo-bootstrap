@@ -1,0 +1,39 @@
+---
+target: assets/ingress/ws.yaml
+---
+
+{%- set config = data.get('cluster') -%}
+{%- set short_host = 'ws.{}'.format(config['company']['domain']) -%}
+{%- set long_host = 'ws.{}-{}.{}'.format(config['cluster']['country'], config['cluster']['region'], config['company']['domain']) -%}
+{%- set sbc_node = kube.get_first('node', namespace=None, selector={'sbc': 'true'}) -%}
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ short_host }}
+  labels:
+    app: kazoo
+    project: {{ config['project'] }}
+    environment: {{ config['environment'] }}
+    domain: {{ short_host }}
+    provides: websockets
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    ingress.kubernetes.io/proxy-send-timeout: 360s
+    ingress.kubernetes.io/proxy-read-timeout: 360s
+spec:
+  rules:
+  - host: {{ short_host }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kazoo
+          servicePort: 5555
+  {# - host: {{ long_host }}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kazoo
+          servicePort: 5555 #}

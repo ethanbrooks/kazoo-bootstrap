@@ -18,3 +18,10 @@ def delete(ctx, environment=None):
 @task
 def template(ctx):
     ctx.run('tmpld templates/*.j2')
+
+
+@task
+def create_cluster_config(ctx):
+    ctx.run('kubectl create secret generic cluster --from-file={}'.format(
+        ctx.kube['cluster_file']
+    ))

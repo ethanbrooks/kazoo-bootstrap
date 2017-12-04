@@ -1,7 +1,14 @@
 from os.path import join
 import json
 
-from . import BASE_PATH
+from kzconfig.util import (
+    quote,
+    b64encode,
+    b64decode,
+    join_url,
+    json_dumps,
+    addrs_for
+)
 
 
 def load_config(name):
@@ -12,4 +19,4 @@ def load_config(name):
 
 
 def full_path(rel_path):
-    return join(BASE_PATH, rel_path)
+    return join('.', rel_path)

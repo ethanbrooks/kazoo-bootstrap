@@ -1,2 +1,2 @@
 assets/config/*.json
-assets/data/*.csv
+config/ratedeck-rates.csv

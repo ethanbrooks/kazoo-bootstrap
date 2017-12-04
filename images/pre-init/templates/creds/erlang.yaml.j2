@@ -1,8 +1,8 @@
 ---
-target: /assets/creds/erlang.yaml
+target: assets/creds/erlang.yaml
 ---
 
-{% set config = data.get('config') %}
+{%- set config = data.get('cluster') -%}
 
 apiVersion: v1
 kind: Secret

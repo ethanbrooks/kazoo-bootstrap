@@ -1,0 +1,20 @@
+---
+target: assets/creds/dns.dnsimple.yaml
+---
+
+{%- set config = data.get('cluster') -%}
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: dns.{{ config['dns']['name'] }}
+  labels:
+    role: dns
+    project: {{ config['project'] }}
+    environment: {{ config['environment'] }}
+type: Opaque
+data:
+  name: {{ config['dns']['name']|b64encode }}
+  email: {{ config['dns']['email']|b64encode }}
+  password: {{ config['dns']['password']|b64encode }}
+  oauth-token: {{ config['dns']['oauth-token']|b64encode }}

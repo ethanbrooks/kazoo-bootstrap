@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cluster-bootstrap-pre-init
+  labels:
+    project: telephoneorg
+    environment: production
+spec:
+  template:
+    metadata:
+      name: cluster-bootstrap-pre-init
+    spec:
+      containers:
+      - name: pre-init
+        image: telephoneorg/bootstrap-pre-init:latest
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: cluster
+          mountPath: /bootstrap/config
+      volumes:
+      - name: cluster
+        secret:
+          secretName: cluster
+      restartPolicy: Never

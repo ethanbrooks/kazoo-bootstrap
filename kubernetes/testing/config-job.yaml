@@ -1,23 +1,16 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: cluster-bootstrap
+  name: cluster-bootstrap-config
   labels:
     project: telephoneorg
     environment: production
 spec:
   template:
     metadata:
-      name: cluster-bootstrap
+      name: cluster-bootstrap-config
     spec:
       containers:
-      - name: pre-init
-        image: telephoneorg/bootstrap-pre-init:latest
-        imagePullPolicy: Always
-        volumeMounts:
-        - name: cluster
-          mountPath: /bootstrap/config
-      # init/manifest container here
       - name: kubewait
         image: telephoneorg/kubewait
         imagePullPolicy: IfNotPresent
@@ -32,16 +25,7 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-      - name: post-init
-        image: telephoneorg/bootstrap-post-init:latest
-        imagePullPolicy: Always
-      # download rates and other files to shared volume for config container to
-      # consume.
       - name: config
         image: telephoneorg/bootstrap-config:latest
         imagePullPolicy: Always
-      volumes:
-      - name: cluster
-        secret:
-          secretName: cluster
       restartPolicy: Never

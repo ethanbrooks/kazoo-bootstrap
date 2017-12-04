@@ -1,0 +1,40 @@
+  mxs:
+  - mxa.mailgun.org
+  - mxb.mailgun.com
+  dkim:
+    name: mx._domainkey.notify
+    record: k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDL9N444n4/TFrw7vh/7WT2059g9/rZqu+iqhkUE7s6plPXbqD7rLsQxC+XyxeE6OtlsQCsMWEgKuhKxVSJopyenk3ftTevTHpeHKfiVBruijBKxDgqHNFh7CABDZO346DzD81cgzMTMzQMongfnvY/Czawbg9dxxWGwbXv2PfEowIDAQAB
+  hosts:
+  - host: saturn
+    public: 162.210.195.110
+    private: 10.31.4.135
+  - host: jupiter
+    public: 162.210.194.99
+    private: 10.31.4.131
+  - host: pluto
+    public: 162.210.194.107
+    private: 10.31.4.132
+
+# as:
+# host.valuphone.com
+# host.local.valuphone.com
+#
+# cluster.valuphone.com
+# cluster.local.valuphone.com
+#
+# cnames: kube, drone, s3, api, my ->
+# sip-proxy -> tag:sip-proxy
+# media-server -> tag:media-server
+#
+# ws, wss -> sip-proxy.
+#
+# email.notify -> mailgun.org
+# p -> p3.zswitch.net
+#
+# mxs:
+#   notify -> mxa.mailgun.org  priority 10
+#   notify -> mxb.mailgun.org  priority 10
+#
+# txts:
+#   mx._domainkey.notify -> k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDL9N444n4/TFrw7vh/7WT2059g9/rZqu+iqhkUE7s6plPXbqD7rLsQxC+XyxeE6OtlsQCsMWEgKuhKxVSJopyenk3ftTevTHpeHKfiVBruijBKxDgqHNFh7CABDZO346DzD81cgzMTMzQMongfnvY/Czawbg9dxxWGwbXv2PfEowIDAQAB
+#   notify -> v=spf1 include:mailgun.org ~all
